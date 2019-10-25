@@ -1,0 +1,21 @@
+on post-fs-data
+    mkdir /data/ssh 0700 system system
+    mkdir /data/ssh/empty 0600 root root
+
+on property:sys.boot_completed=1 && property:persist.sys.sshd.enabled=1
+    start sshd
+
+service sshd /system/bin/sshd -f /data/ssh/sshd_config
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1 && property:persist.sys.sftpd.enabled=1
+    start sftpd
+
+service sftpd /system/bin/sshd -f /data/ssh/sftpd_config
+    user root
+    group root
+    oneshot
+    disabled

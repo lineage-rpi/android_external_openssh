@@ -291,7 +291,9 @@ LOCAL_C_INCLUDES := \
     external/openssh/openbsd-compat
 
 LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz libcutils
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 27; echo $$?),0)
 LOCAL_SHARED_LIBRARIES += libc.bootstrap
+endif
 
 include $(BUILD_EXECUTABLE)
 
@@ -325,7 +327,7 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := sshd_config
 LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/ssh
-LOCAL_SRC_FILES := sshd_config.android
+LOCAL_SRC_FILES := sshd_config.android-sshd
 include $(BUILD_PREBUILT)
 
 ###################### start-ssh ######################
@@ -335,4 +337,24 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := start-ssh
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_SRC_FILES := start-ssh
+include $(BUILD_PREBUILT)
+
+####################### sshd.rc ######################ä
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := sshd.rc
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/init
+LOCAL_SRC_FILES := sshd.rc
+include $(BUILD_PREBUILT)
+
+#################### sftpd_config ########################
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := sftpd_config
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/ssh
+LOCAL_SRC_FILES := sshd_config.android-sftpd
 include $(BUILD_PREBUILT)
