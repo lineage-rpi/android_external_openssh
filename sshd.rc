@@ -5,7 +5,10 @@ on post-fs-data
 on property:sys.boot_completed=1 && property:persist.sys.sshd.enabled=1
     start sshd
 
-service sshd /system/bin/sshd -f /data/ssh/sshd_config
+on property:persist.sys.sshd.enabled=0
+    stop sshd
+
+service sshd /system/bin/sshd -f /data/ssh/sshd_config -D
     user root
     group root
     oneshot
@@ -14,7 +17,10 @@ service sshd /system/bin/sshd -f /data/ssh/sshd_config
 on property:sys.boot_completed=1 && property:persist.sys.sftpd.enabled=1
     start sftpd
 
-service sftpd /system/bin/sshd -f /data/ssh/sftpd_config
+on property:persist.sys.sftpd.enabled=0
+    stop sftpd
+
+service sftpd /system/bin/sshd -f /data/ssh/sftpd_config -D
     user root
     group root
     oneshot
