@@ -553,6 +553,9 @@
 /* Define if libcrypto has EVP_PKEY_get0_RSA */
 #define HAVE_EVP_PKEY_GET0_RSA 1
 
+/* Define if openssl-compat.h has EVP_PKEY_base_id */
+#define HAVE_EVP_PKEY_BASE_ID 1
+
 /* Define if you have ut_host in utmp.h */
 #define HAVE_HOST_IN_UTMP 1
 
