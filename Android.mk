@@ -295,6 +295,8 @@ ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 27; echo $$?),0)
 LOCAL_SHARED_LIBRARIES += libc.bootstrap
 endif
 
+LOCAL_INIT_RC := sshd.rc
+
 include $(BUILD_EXECUTABLE)
 
 ###################### ssh-keygen ######################
@@ -337,14 +339,4 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := start-ssh
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_SRC_FILES := start-ssh
-include $(BUILD_PREBUILT)
-
-####################### sshd.rc ######################ä
-
-include $(CLEAR_VARS)
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := sshd.rc
-LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/init
-LOCAL_SRC_FILES := sshd.rc
 include $(BUILD_PREBUILT)
