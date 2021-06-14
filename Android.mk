@@ -348,13 +348,3 @@ LOCAL_MODULE_CLASS := ETC
 LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/init
 LOCAL_SRC_FILES := sshd.rc
 include $(BUILD_PREBUILT)
-
-#################### sftpd_config ########################
-
-include $(CLEAR_VARS)
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := sftpd_config
-LOCAL_MODULE_CLASS := ETC
-LOCAL_MODULE_PATH := $(TARGET_OUT_ETC)/ssh
-LOCAL_SRC_FILES := sshd_config.android-sftpd
-include $(BUILD_PREBUILT)

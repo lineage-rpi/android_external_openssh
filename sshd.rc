@@ -13,15 +13,3 @@ service sshd /system/bin/sshd -f /data/ssh/sshd_config -D
     group root
     oneshot
     disabled
-
-on property:sys.boot_completed=1 && property:persist.sys.sftpd.enabled=1
-    start sftpd
-
-on property:persist.sys.sftpd.enabled=0
-    stop sftpd
-
-service sftpd /system/bin/sshd -f /data/ssh/sftpd_config -D
-    user root
-    group root
-    oneshot
-    disabled
