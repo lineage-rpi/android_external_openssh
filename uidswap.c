@@ -28,13 +28,18 @@
 #include "uidswap.h"
 #include "xmalloc.h"
 
-#ifdef ANDROID
-#include <private/android_filesystem_config.h>
-#if !defined(GCE_PLATFORM_SDK_VERSION) || (GCE_PLATFORM_SDK_VERSION > 17)
+#if defined(ANDROID)
+#define AID_GRAPHICS		1003
+#define AID_INPUT		1004
+#define AID_LOG			1007
+#define AID_MOUNT		1009
+#define AID_SDCARD_RW		1015
+#define AID_SHELL		2000
+#define AID_NET_BT_ADMIN	3001
+#define AID_NET_BT		3002
+#define AID_INET		3003
+#define AID_NET_BW_STATS	3006
 #include <sys/capability.h>
-#else
-#include <linux/capability.h>
-#endif
 #include <sys/prctl.h>
 #endif
 
@@ -268,7 +273,7 @@ permanently_set_uid(struct passwd *pw)
 		    (u_int)pw->pw_uid);
 	}
 
-#ifdef ANDROID
+#if defined(ANDROID)
 	if (pw->pw_uid == AID_SHELL) {
 		/* set CAP_SYS_BOOT capability, so "adb reboot" will succeed */
 		header.version = _LINUX_CAPABILITY_VERSION;
