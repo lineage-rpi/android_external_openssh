@@ -101,7 +101,7 @@ PasswordAuthentication no
 #PidFile /var/run/sshd.pid
 #MaxStartups 10:30:100
 #PermitTunnel no
-ChrootDirectory /
+#ChrootDirectory none
 #VersionAddendum none
 
 # no default banner path
