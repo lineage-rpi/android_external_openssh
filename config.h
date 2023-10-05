@@ -332,6 +332,18 @@
 /* Define if you have /dev/ptc */
 /* #undef HAVE_DEV_PTS_AND_PTC */
 
+/* Define to 1 if you have the `DH_get0_pqg' function. */
+#define HAVE_DH_GET0_PQG 1
+
+/* Define to 1 if you have the `DH_set0_pqg' function. */
+#define HAVE_DH_SET0_PQG 1
+
+/* Define to 1 if you have the `DH_get0_key' function. */
+#define HAVE_DH_GET0_KEY 1
+
+/* Define to 1 if you have the `DH_set0_key' function. */
+#define HAVE_DH_SET0_KEY 1
+
 /* Define to 1 if you have the `DH_set_length' function. */
 #define HAVE_DH_SET_LENGTH 1
 
