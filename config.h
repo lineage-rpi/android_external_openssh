@@ -359,6 +359,18 @@
 /* Define to 1 if you have the `DSA_generate_parameters_ex' function. */
 #define HAVE_DSA_GENERATE_PARAMETERS_EX 1
 
+/* Define to 1 if you have the `DSA_get0_pqg' function. */
+#define HAVE_DSA_GET0_PQG 1
+
+/* Define to 1 if you have the `DSA_set0_pqg' function. */
+#define HAVE_DSA_SET0_PQG 1
+
+/* Define to 1 if you have the `DSA_get0_key' function. */
+#define HAVE_DSA_GET0_KEY 1
+
+/* Define to 1 if you have the `DSA_set0_key' function. */
+#define HAVE_DSA_SET0_KEY 1
+
 /* Define to 1 if you have the <elf.h> header file. */
 #define HAVE_ELF_H 1
 
@@ -835,6 +847,24 @@
 
 /* Define to 1 if you have the `RSA_get_default_method' function. */
 #define HAVE_RSA_GET_DEFAULT_METHOD 1
+
+/* Define to 1 if you have the `RSA_get0_key' function. */
+#define HAVE_RSA_GET0_KEY 1
+
+/* Define to 1 if you have the `RSA_set0_key' function. */
+#define HAVE_RSA_SET0_KEY 1
+
+/* Define to 1 if you have the `RSA_get0_crt_params' function. */
+#define HAVE_RSA_GET0_CRT_PARAMS 1
+
+/* Define to 1 if you have the `RSA_set0_crt_params' function. */
+#define HAVE_RSA_SET0_CRT_PARAMS 1
+
+/* Define to 1 if you have the `RSA_get0_factors' function. */
+#define HAVE_RSA_GET0_FACTORS 1
+
+/* Define to 1 if you have the `RSA_set0_factors' function. */
+#define HAVE_RSA_SET0_FACTORS 1
 
 /* Define to 1 if you have the <sandbox.h> header file. */
 /* #undef HAVE_SANDBOX_H */
