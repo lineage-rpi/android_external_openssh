@@ -1,27 +1,20 @@
 LOCAL_PATH:= $(call my-dir)
 
 openssh_common_cflags := \
-    -Wall \
-    -Werror \
-    -Wno-error=implicit-function-declaration \
-    -Wno-pointer-sign \
-    -Wno-sign-compare \
-    -Wno-type-limits \
-    -Wno-unused-parameter \
-    -Wno-unused-variable \
-    -Wno-error \
-
-# Use -Wno-error to allow at least the following warnings:
-# (1) bsd-openpty.c calls to 'ptsname' declared with attribute warning:
-#     ptsname is not thread-safe; use ptsname_r instead [-Werror]
-# (2) external/boringssl/src/include/openssl/opensslfeatures.h:
-#     error: "OPENSSL_NO_BF" redefined [-Werror]
-
-openssh_common_clang_cflags := \
-    -Wno-incompatible-pointer-types \
     -Wno-macro-redefined \
+    -Wno-pointer-sign
+
+openssh_common_c_includes := \
+    external/openssh/openbsd-compat
+
+openssh_common_shared_libraries := \
+    libcrypto \
+    libdl \
+    libssl \
+    libz
 
 ###################### libssh ######################
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
@@ -37,9 +30,9 @@ LOCAL_SRC_FILES := \
     channels.c \
     cipher-aes.c \
     cipher-aesctr.c \
-    cipher.c \
     cipher-chachapoly.c \
     cipher-ctr.c \
+    cipher.c \
     cleanup.c \
     compat.c \
     crc32.c \
@@ -76,6 +69,7 @@ LOCAL_SRC_FILES := \
     openbsd-compat/bcrypt_pbkdf.c \
     openbsd-compat/bindresvport.c \
     openbsd-compat/blowfish.c \
+    openbsd-compat/boringssl-api-compat.c \
     openbsd-compat/bsd-closefrom.c \
     openbsd-compat/bsd-getpeereid.c \
     openbsd-compat/bsd-misc.c \
@@ -83,11 +77,10 @@ LOCAL_SRC_FILES := \
     openbsd-compat/bsd-signal.c \
     openbsd-compat/bsd-statvfs.c \
     openbsd-compat/explicit_bzero.c \
-    openbsd-compat/freezero.c \
     openbsd-compat/fmt_scaled.c \
+    openbsd-compat/freezero.c \
     openbsd-compat/getopt_long.c \
     openbsd-compat/glob.c \
-    openbsd-compat/boringssl-api-compat.c \
     openbsd-compat/openssl-compat.c \
     openbsd-compat/port-linux.c \
     openbsd-compat/port-net.c \
@@ -110,23 +103,23 @@ LOCAL_SRC_FILES := \
     rijndael.c \
     sc25519.c \
     smult_curve25519_ref.c \
-    sshbuf.c \
-    sshbuf-getput-basic.c \
-    sshbuf-getput-crypto.c \
-    sshbuf-misc.c \
+    sntrup4591761.c \
     ssh-dss.c \
     ssh-ecdsa.c \
     ssh-ed25519.c \
-    ssherr.c \
-    sshkey.c \
-    sshkey-xmss.c \
     ssh-rsa.c \
     ssh-xmss.c \
-    sntrup4591761.c \
+    sshbuf-getput-basic.c \
+    sshbuf-getput-crypto.c \
+    sshbuf-misc.c \
+    sshbuf.c \
+    ssherr.c \
+    sshkey-xmss.c \
+    sshkey.c \
     ttymodes.c \
     uidswap.c \
-    umac128.c \
     umac.c \
+    umac128.c \
     utf8.c \
     uuencode.c \
     verify.c \
@@ -137,23 +130,15 @@ LOCAL_SRC_FILES := \
     xmss_hash.c \
     xmss_wots.c
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
-
-LOCAL_SHARED_LIBRARIES += libssl libcrypto libdl libz
-
 LOCAL_MODULE := libssh
 
-LOCAL_CFLAGS += -O3 $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := \
+    $(openssh_common_cflags) \
+    -O3
 
-LOCAL_CFLAGS += -DGCE_PLATFORM_SDK_VERSION=$(PLATFORM_SDK_VERSION)
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-ifneq (,$(SSHDIR))
-LOCAL_CFLAGS += -DSSHDIR=\"$(SSHDIR)\"
-endif
+LOCAL_SHARED_LIBRARIES := $(openssh_common_shared_libraries)
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -165,25 +150,23 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := \
     clientloop.c \
-    readconf.c \
     mux.c \
+    readconf.c \
     ssh.c \
-    sshconnect2.c \
     sshconnect.c \
+    sshconnect2.c \
     sshtty.c \
     uidswap.c
 
 LOCAL_MODULE := ssh
 
-LOCAL_CFLAGS += $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := $(openssh_common_cflags)
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz
+LOCAL_SHARED_LIBRARIES := \
+     $(openssh_common_shared_libraries) \
+     libssh
 
 include $(BUILD_EXECUTABLE)
 
@@ -194,19 +177,21 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := \
-    sftp.c sftp-client.c sftp-common.c sftp-glob.c progressmeter.c
+    progressmeter.c \
+    sftp-client.c \
+    sftp-common.c \
+    sftp-glob.c \
+    sftp.c
 
 LOCAL_MODULE := sftp
 
-LOCAL_CFLAGS += $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := $(openssh_common_cflags)
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz
+LOCAL_SHARED_LIBRARIES := \
+    $(openssh_common_shared_libraries) \
+    libssh
 
 include $(BUILD_EXECUTABLE)
 
@@ -217,19 +202,18 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := \
-    scp.c progressmeter.c
+    progressmeter.c \
+    scp.c
 
 LOCAL_MODULE := scp
 
-LOCAL_CFLAGS += $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := $(openssh_common_cflags)
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz
+LOCAL_SHARED_LIBRARIES := \
+    $(openssh_common_shared_libraries) \
+    libssh
 
 include $(BUILD_EXECUTABLE)
 
@@ -265,8 +249,8 @@ LOCAL_SRC_FILES := \
     kexgexs.c \
     loginrec.c \
     md5crypt.c \
-    monitor.c \
     monitor_wrap.c \
+    monitor.c \
     platform.c \
     sandbox-null.c \
     sandbox-rlimit.c \
@@ -282,18 +266,14 @@ LOCAL_SRC_FILES := \
 
 LOCAL_MODULE := sshd
 
-LOCAL_CFLAGS += $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := $(openssh_common_cflags)
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz libcutils
-ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 27; echo $$?),0)
-LOCAL_SHARED_LIBRARIES += libc.bootstrap
-endif
+LOCAL_SHARED_LIBRARIES := \
+    $(openssh_common_shared_libraries) \
+    libcutils \
+    libssh
 
 LOCAL_INIT_RC := sshd.rc
 
@@ -310,15 +290,13 @@ LOCAL_SRC_FILES := \
 
 LOCAL_MODULE := ssh-keygen
 
-LOCAL_CFLAGS += $(openssh_common_cflags)
-LOCAL_CLANG_CFLAGS += $(openssh_common_clang_cflags)
+LOCAL_CFLAGS := $(openssh_common_cflags)
 
-LOCAL_C_INCLUDES := \
-    external/zlib \
-    external/openssl/include \
-    external/openssh/openbsd-compat
+LOCAL_C_INCLUDES := $(openssh_common_c_includes)
 
-LOCAL_SHARED_LIBRARIES += libssh libssl libcrypto libdl libz
+LOCAL_SHARED_LIBRARIES := \
+    $(openssh_common_shared_libraries) \
+    libssh
 
 include $(BUILD_EXECUTABLE)
 

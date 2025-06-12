@@ -47,7 +47,7 @@ copy_statfs_to_statvfs(struct statvfs *to, struct statfs *from)
 	to->f_ffree = from->f_ffree;
 	to->f_favail = from->f_ffree;	/* no exact equivalent */
 	to->f_fsid = 0;			/* XXX fix me */
-#if defined HAVE_STRUCT_STATFS_F_FLAGS || GCE_PLATFORM_SDK_VERSION >= 19
+#if defined(ANDROID) || defined(HAVE_STRUCT_STATFS_F_FLAGS)
 	to->f_flag = from->f_flags;
 #else
 	to->f_flag = 0;
