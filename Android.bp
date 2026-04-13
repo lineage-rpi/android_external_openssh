@@ -17,6 +17,7 @@ cc_defaults {
         "libz",
     ],
     cflags: [
+        "-D_FORTIFY_SOURCE=2",
         "-Wno-macro-redefined",
         "-Wno-pointer-sign",
     ],
