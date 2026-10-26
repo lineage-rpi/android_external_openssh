@@ -1,14 +1,21 @@
 on post-fs-data
     mkdir /data/ssh 0700 root shell
     mkdir /data/ssh/empty 0600 root shell
+    start init-ssh
 
-on property:sys.boot_completed=1 && property:persist.sshd.enabled=1
+service init-ssh /vendor/bin/init-ssh
+    user root
+    group root
+    oneshot
+    disabled
+
+on property:sys.boot_completed=1 && property:persist.vendor.sshd.enabled=true
     start sshd
 
-on property:persist.sshd.enabled=0
+on property:persist.vendor.sshd.enabled=false
     stop sshd
 
-service sshd /system/bin/sshd -f /data/ssh/sshd_config -D
+service sshd /vendor/bin/sshd -f /data/ssh/sshd_config -D
     user root
     group root
     oneshot

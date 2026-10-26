@@ -7,6 +7,7 @@
 
 cc_defaults {
     name: "ssh_defaults",
+    vendor: true,
     include_dirs: [
         "external/openssh/openbsd-compat",
     ],
@@ -244,10 +245,18 @@ cc_binary {
 prebuilt_etc {
     name: "sshd_config",
     src: "sshd_config.android",
-    relative_install_path: "ssh",
+    vendor: true,
+    sub_dir: "ssh",
+}
+
+sh_binary {
+    name: "init-ssh",
+    src: "init-ssh",
+    vendor: true,
 }
 
 sh_binary {
     name: "start-ssh",
     src: "start-ssh",
+    vendor: true,
 }
